@@ -1,4 +1,16 @@
-var app = 'app';
+import React from 'react';
+import Router from 'react-router';
+import App from './components/App';
+
+const { Route } = Router;
 
 
-// cccc
+var routes = <Route handler={App}>
+</Route>;
+
+Router.run(routes, Router.HistoryLocation, Root =>
+	React.render(<Root />, document.getElementById('app')));
+
+
+
+//<Route name='page' path='/page/:id' handler={Page} />
