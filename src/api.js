@@ -1,0 +1,18 @@
+import Firebase from 'firebase';
+
+
+const post = ( url, body ) => fetch( url, {
+	method: 'POST',
+	credentials: 'include',
+	body: JSON.stringify( body || {} ),
+	headers: {
+		'Content-Type': 'application/json',
+		'Accept': 'application/json'
+	}
+} ).then( res => res.json() );
+
+export const signin = ( usename, password ) => post( '/api/signin', { username, password } );
+export const signup = ( usename, password ) => post( '/api/signup', { username, password } );
+export const signout = () => post('/api/signout');
+
+export const pages = new Firebase('https://wicker-tuts-9a142.firebaseio.com/pages');
