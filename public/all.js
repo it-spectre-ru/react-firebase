@@ -23346,6 +23346,10 @@ var _Login = require('./Login');
 
 var _Login2 = _interopRequireDefault(_Login);
 
+var _PageList = require('./PageList');
+
+var _PageList2 = _interopRequireDefault(_PageList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23391,7 +23395,7 @@ var App = function (_React$Component) {
 							' Wicker '
 						),
 						_react2.default.createElement(_Login2.default, { user: this.state.user, setUser: this.setUser }),
-						'PageList'
+						_react2.default.createElement(_PageList2.default, { user: this.state.user })
 					),
 					_react2.default.createElement(
 						'div',
@@ -23408,7 +23412,7 @@ var App = function (_React$Component) {
 
 exports.default = App;
 
-},{"./Login":203,"react":199,"react-router":29}],203:[function(require,module,exports){
+},{"./Login":203,"./PageList":204,"react":199,"react-router":29}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23530,5 +23534,78 @@ var Login = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Login;
+
+},{"../api":200,"react":199}],204:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _api = require('../api');
+
+var API = _interopRequireWildcard(_api);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PageList = function (_React$Component) {
+	_inherits(PageList, _React$Component);
+
+	function PageList() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
+		_classCallCheck(this, PageList);
+
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PageList.__proto__ || Object.getPrototypeOf(PageList)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+			newPageTitle: ''
+		}, _this.update = function (evt) {
+			return _this.setState({ newPageTitle: evt.target.value });
+		}, _this.createPage = function (evt) {
+			if (evt.charCode !== 13) return;
+			API.pages.push({ title: _this.state.newPageTitle });
+			_this.setState({ newPageTitle: '' });
+		}, _temp), _possibleConstructorReturn(_this, _ret);
+	}
+
+	_createClass(PageList, [{
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				this.props.user ? _react2.default.createElement('input', { type: 'text',
+					className: 'u-full-width',
+					value: this.state.newPageTitle,
+					placeholder: 'New Page Title',
+					onChange: this.update,
+					onKeyPress: this.createPage }) : null
+			);
+		}
+	}]);
+
+	return PageList;
+}(_react2.default.Component);
+
+exports.default = PageList;
 
 },{"../api":200,"react":199}]},{},[201]);
