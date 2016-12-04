@@ -23319,13 +23319,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Route = _reactRouter2.default.Route;
 
 
-var routes = _react2.default.createElement(Route, { handler: _App2.default });
+var routes = _react2.default.createElement(
+	Route,
+	{ handler: _App2.default },
+	_react2.default.createElement(Route, { name: 'page', path: '/page/:id', handler: _App2.default })
+);
 
 _reactRouter2.default.run(routes, _reactRouter2.default.HistoryLocation, function (Root) {
 	return _react2.default.render(_react2.default.createElement(Root, null), document.getElementById('app'));
 });
-
-//<Route name='page' path='/page/:id' handler={Page} />
 
 },{"./components/App":202,"react":199,"react-router":29}],202:[function(require,module,exports){
 'use strict';
@@ -23487,13 +23489,11 @@ var Login = function (_React$Component) {
 				_react2.default.createElement(
 					'p',
 					null,
-					' ',
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.signout },
-						' Sign Out '
-					),
-					' '
+						' Sign Out'
+					)
 				)
 			);
 
@@ -23503,13 +23503,11 @@ var Login = function (_React$Component) {
 				_react2.default.createElement(
 					'p',
 					null,
-					' ',
 					_react2.default.createElement('input', { className: 'u-full-width', placeholder: 'Username', ref: 'username', type: 'text' })
 				),
 				_react2.default.createElement(
 					'p',
 					null,
-					' ',
 					_react2.default.createElement('input', { className: 'u-full-width', placeholder: 'Password', ref: 'password', type: 'password' })
 				),
 				_react2.default.createElement(
@@ -23518,12 +23516,12 @@ var Login = function (_React$Component) {
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.signin },
-						' Sign In '
+						' Sign In'
 					),
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.signup },
-						' Sign Up '
+						' Sign Up'
 					)
 				)
 			);
@@ -23552,6 +23550,8 @@ var _api = require('../api');
 
 var API = _interopRequireWildcard(_api);
 
+var _reactRouter = require('react-router');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -23577,6 +23577,8 @@ var PageList = function (_React$Component) {
 		}
 
 		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PageList.__proto__ || Object.getPrototypeOf(PageList)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+			loaded: false,
+			pages: {},
 			newPageTitle: ''
 		}, _this.update = function (evt) {
 			return _this.setState({ newPageTitle: evt.target.value });
@@ -23588,11 +23590,54 @@ var PageList = function (_React$Component) {
 	}
 
 	_createClass(PageList, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			API.pages.on('value', function (ss) {
+				return _this2.setState({
+					pages: ss.exportVal() || {},
+					loaded: true
+				});
+			});
+		}
+	}, {
 		key: 'render',
 		value: function render() {
+			var _this3 = this;
+
+			var items = this.state.loaded ? Object.keys(this.state.pages).map(function (id) {
+				return _react2.default.createElement(
+					'li',
+					{ key: id },
+					_react2.default.createElement(
+						_reactRouter.Link,
+						{ to: 'page', params: { id: id } },
+						' ',
+						_this3.state.pages[id].title,
+						' '
+					)
+				);
+			}) : [_react2.default.createElement(
+				'li',
+				{ key: 'loading' },
+				_react2.default.createElement(
+					'em',
+					null,
+					' Loading... '
+				)
+			)];
+
 			return _react2.default.createElement(
 				'div',
 				null,
+				_react2.default.createElement(
+					'ul',
+					null,
+					' ',
+					items,
+					' '
+				),
 				this.props.user ? _react2.default.createElement('input', { type: 'text',
 					className: 'u-full-width',
 					value: this.state.newPageTitle,
@@ -23608,4 +23653,4 @@ var PageList = function (_React$Component) {
 
 exports.default = PageList;
 
-},{"../api":200,"react":199}]},{},[201]);
+},{"../api":200,"react":199,"react-router":29}]},{},[201]);

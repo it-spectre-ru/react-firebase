@@ -22,5 +22,6 @@ export default class App extends React.Component {
 			</div>
 		</div>;
 	}
-	setUser = (user) => this.setState({ user: user });
+
+	setUser = ( user ) => this.setState( { user: user } );
 }
