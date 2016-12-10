@@ -25987,6 +25987,8 @@ var Page = function (_React$Component) {
 					sections = Object.keys(this.state.sections).map(function (id) {
 						return _react2.default.createElement(_Section2.default, {
 							key: id,
+							user: _this2.props.user,
+							path: _this2.props.params.id + '/sections/' + id,
 							section: _this2.state.sections[id] });
 					});
 				}
@@ -26155,7 +26157,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _api = require('../api');
+
+var API = _interopRequireWildcard(_api);
+
 var _markdown = require('markdown');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26180,15 +26188,33 @@ var Section = function (_React$Component) {
 	}
 
 	_createClass(Section, [{
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			var state = this.getState(nextProps);
+
+			this.setState(state);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			var content = _react2.default.createElement('span', { dangerouslySetInnerHTML: { __html: this.state.html } });
+			var content = void 0;
+
+			if (this.state.editing) {
+				content = _react2.default.createElement('textarea', { className: 'twelve columns', defaultValue: this.state.content,
+					onChange: this.updateContent,
+					onBlur: this.save });
+			} else {
+				content = _react2.default.createElement('span', { dangerouslySetInnerHTML: { __html: this.state.html } });
+			}
 
 			var classes = ['row', 'section'];
 
+			if (this.state.editing) classes.push('editing');
+			if (this.props.user) classes.push('editable');
+
 			return _react2.default.createElement(
 				'section',
-				{ className: classes.join(' ') },
+				{ onClick: this.startEditing, className: classes.join(' ') },
 				content
 			);
 		}
@@ -26198,14 +26224,38 @@ var Section = function (_React$Component) {
 }(_react2.default.Component);
 
 var _initialiseProps = function _initialiseProps() {
+	var _this2 = this;
+
 	this.getState = function (props) {
 		return {
+			editing: props.user && props.user.username === props.section.editor,
 			content: props.section.content,
 			html: props.section.content ? _markdown.markdown.toHTML(props.section.content) : ''
 		};
+	};
+
+	this.updateContent = function (evt) {
+		return _this2.setState({ content: evt.target.value });
+	};
+
+	this.save = function (evt) {
+		_this2.setState({ editing: false });
+
+		API.pages.child(_this2.props.path).update({
+			editor: null,
+			content: _this2.state.content || null
+		});
+	};
+
+	this.startEditing = function (evt) {
+		if (!_this2.props.user || _this2.state.editing) return;
+		_this2.setState({ editing: true });
+		API.pages.child(_this2.props.path).update({
+			editor: _this2.props.user.username
+		});
 	};
 };
 
 exports.default = Section;
 
-},{"markdown":4,"react":201}]},{},[206]);
+},{"../api":205,"markdown":4,"react":201}]},{},[206]);
