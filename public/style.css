@@ -1,7 +1,7 @@
 .section {
   padding: 5px;
   border-radius: 4px;
-  border: 1px solid #1EAEDB;
+  border: 1px solid #fff;
   margin-bottom: 1em;
 }
 
@@ -10,5 +10,10 @@
 }
 
 .editable:not(.editing):hover {
-  border-color: #D1D1D1;
+  border-color: #d1d1d1;
+}
+
+.locked {
+  border-color: #ececec;
+  background: #d1d1d1;
 }
