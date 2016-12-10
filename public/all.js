@@ -26176,13 +26176,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Section = function (_React$Component) {
 	_inherits(Section, _React$Component);
 
-	function Section(props) {
+	function Section(props, context) {
 		_classCallCheck(this, Section);
 
-		var _this = _possibleConstructorReturn(this, (Section.__proto__ || Object.getPrototypeOf(Section)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (Section.__proto__ || Object.getPrototypeOf(Section)).call(this, props, context));
 
 		_initialiseProps.call(_this);
 
+		_this.context = context;
 		_this.state = _this.getState(props);
 		return _this;
 	}
@@ -26249,7 +26250,16 @@ var _initialiseProps = function _initialiseProps() {
 	};
 
 	this.startEditing = function (evt) {
-		if (!_this2.props.user || _this2.state.editing) return;
+		if (evt.target.tagName === 'A') {
+			var href = evt.target.getAttribute('href');
+			if (href.indexOf('/page/') > 0) {
+				_this2.context.router.transitionTo(href);
+				return evt.preventDefault();
+			}
+			return;
+		}
+
+		if (!_this2.props.user || _this2.state.editing || _this2.state.locked) return;
 		_this2.setState({ editing: true });
 		API.pages.child(_this2.props.path).update({
 			editor: _this2.props.user.username
@@ -26258,5 +26268,10 @@ var _initialiseProps = function _initialiseProps() {
 };
 
 exports.default = Section;
+
+
+Section.contextTypes = {
+	router: _react2.default.PropTypes.func.isRequired
+};
 
 },{"../api":205,"markdown":4,"react":201}]},{},[206]);
