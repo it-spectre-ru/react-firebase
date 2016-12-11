@@ -26056,28 +26056,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var PageList = function (_React$Component) {
 	_inherits(PageList, _React$Component);
 
-	function PageList() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
+	function PageList(props, context) {
 		_classCallCheck(this, PageList);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		var _this = _possibleConstructorReturn(this, (PageList.__proto__ || Object.getPrototypeOf(PageList)).call(this, props, context));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PageList.__proto__ || Object.getPrototypeOf(PageList)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+		_this.state = {
 			loaded: false,
 			pages: {},
 			newPageTitle: ''
-		}, _this.update = function (evt) {
+		};
+
+		_this.update = function (evt) {
 			return _this.setState({ newPageTitle: evt.target.value });
-		}, _this.createPage = function (evt) {
+		};
+
+		_this.createPage = function (evt) {
 			if (evt.charCode !== 13) return;
-			API.pages.push({ title: _this.state.newPageTitle });
+			var id = API.pages.push({ title: _this.state.newPageTitle });
+			_this.context.router.transitionTo('page', { id: id.key() });
 			_this.setState({ newPageTitle: '' });
-		}, _temp), _possibleConstructorReturn(_this, _ret);
+		};
+
+		_this.context = context;
+		return _this;
 	}
 
 	_createClass(PageList, [{
@@ -26144,6 +26146,11 @@ var PageList = function (_React$Component) {
 
 exports.default = PageList;
 
+
+PageList.contextTypes = {
+	router: _react2.default.PropTypes.func.isRequired
+};
+
 },{"../api":205,"react":201,"react-router":31}],211:[function(require,module,exports){
 'use strict';
 
@@ -26206,12 +26213,17 @@ var Section = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps, prevState) {
+			if (this.state.editing) _react2.default.findDOMNode(this.refs.editor).focus();
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var content = void 0;
 
 			if (this.state.editing) {
-				content = _react2.default.createElement('textarea', { className: 'twelve columns', defaultValue: this.state.content,
+				content = _react2.default.createElement('textarea', { ref: 'editor', className: 'twelve columns', defaultValue: this.state.content,
 					onChange: this.updateContent,
 					onBlur: this.save });
 			} else {
@@ -26299,7 +26311,7 @@ var _initialiseProps = function _initialiseProps() {
 	this.startEditing = function (evt) {
 		if (evt.target.tagName === 'A') {
 			var href = evt.target.getAttribute('href');
-			if (href.indexOf('/page/') > 0) {
+			if (href.indexOf('/page/') === 0) {
 				_this3.context.router.transitionTo(href);
 				return evt.preventDefault();
 			}
