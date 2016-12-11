@@ -24,7 +24,7 @@ export default class Section extends React.Component {
 	}
 
 	componentDidUpdate( prevProps, prevState ) {
-		if (this.state.editing) React.findDOMNode(this.refs.editor).focus();
+		if ( this.state.editing ) React.findDOMNode( this.refs.editor ).focus();
 	}
 
 	getState = props => ({
@@ -39,8 +39,7 @@ export default class Section extends React.Component {
 
 		if ( this.state.editing ) {
 			content = <textarea ref='editor' className='twelve columns' defaultValue={this.state.content}
-													onChange={this.updateContent}
-													onBlur={this.save}/>;
+													onChange={this.updateContent} onBlur={this.save}/>;
 		} else {
 			content = <span dangerouslySetInnerHTML={ { __html: this.state.html } }/>;
 		}
@@ -50,7 +49,7 @@ export default class Section extends React.Component {
 		if ( this.state.editing ) classes.push( 'editing' );
 		if ( this.props.user ) classes.push( this.state.locked ? 'locked' : 'editable' );
 
-		return <section onClick={this.startEditing} className={ classes.join(' ') }>
+		return <section onClick={this.startEditing} className={ classes.join(' ')}>
 			{content}
 		</section>;
 	}

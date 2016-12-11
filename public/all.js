@@ -25953,9 +25953,11 @@ var Page = function (_React$Component) {
 			} else {
 				id = Math.max.apply(Math, _toConsumableArray(Object.keys(_this.state.sections))) + 1;
 			}
+
 			_this.state.sections[id] = {
 				editor: _this.props.user.username
 			};
+
 			_this.setState({
 				sections: _this.state.sections
 			});
@@ -25981,8 +25983,7 @@ var Page = function (_React$Component) {
 			var sections = [];
 
 			if (this.state.page.title) {
-				// data is loaded
-
+				// Data is loaded
 				if (this.state.sections) {
 					sections = Object.keys(this.state.sections).map(function (id) {
 						return _react2.default.createElement(_Section2.default, {
@@ -26011,7 +26012,7 @@ var Page = function (_React$Component) {
 					'h1',
 					null,
 					' ',
-					this.state.page.title || 'Loading ...',
+					this.state.page.title || 'Loading...',
 					' '
 				),
 				sections
@@ -26224,8 +26225,7 @@ var Section = function (_React$Component) {
 
 			if (this.state.editing) {
 				content = _react2.default.createElement('textarea', { ref: 'editor', className: 'twelve columns', defaultValue: this.state.content,
-					onChange: this.updateContent,
-					onBlur: this.save });
+					onChange: this.updateContent, onBlur: this.save });
 			} else {
 				content = _react2.default.createElement('span', { dangerouslySetInnerHTML: { __html: this.state.html } });
 			}

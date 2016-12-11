@@ -26,14 +26,13 @@ export default class Page extends React.Component {
 	render() {
 		let sections = [];
 
-		if ( this.state.page.title ) { // data is loaded
-
+		if ( this.state.page.title ) { // Data is loaded
 			if ( this.state.sections ) {
 				sections = Object.keys( this.state.sections ).map( id => <Section
 					key={id}
 					user={this.props.user}
 					path={this.props.params.id + '/sections/' + id}
-					section={this.state.sections[id]}	/> )
+					section={this.state.sections[id]}/> )
 			}
 
 			if ( this.props.user )
@@ -43,7 +42,7 @@ export default class Page extends React.Component {
 		}
 
 		return <article>
-			<h1> {this.state.page.title || 'Loading ...'} </h1>
+			<h1> {this.state.page.title || 'Loading...'} </h1>
 			{sections}
 		</article>;
 	}
@@ -57,9 +56,11 @@ export default class Page extends React.Component {
 		} else {
 			id = Math.max( ...Object.keys( this.state.sections ) ) + 1;
 		}
+
 		this.state.sections[ id ] = {
 			editor: this.props.user.username
 		}
+
 		this.setState( {
 			sections: this.state.sections
 		} );

@@ -3,7 +3,6 @@ import * as API from '../api';
 
 import { Link } from 'react-router';
 
-
 export default class PageList extends React.Component {
 	state = {
 		loaded: false,
@@ -11,8 +10,8 @@ export default class PageList extends React.Component {
 		newPageTitle: ''
 	}
 
-	constructor (props, context) {
-		super(props, context)
+	constructor( props, context ) {
+		super( props, context )
 		this.context = context;
 	}
 
@@ -47,7 +46,7 @@ export default class PageList extends React.Component {
 	createPage = evt => {
 		if ( evt.charCode !== 13 ) return;
 		var id = API.pages.push( { title: this.state.newPageTitle } );
-		this.context.router.transitionTo('page', { id: id.key() });
+		this.context.router.transitionTo( 'page', { id: id.key() } );
 		this.setState( { newPageTitle: '' } );
 	}
 }
