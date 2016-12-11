@@ -26189,11 +26189,21 @@ var Section = function (_React$Component) {
 	}
 
 	_createClass(Section, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.componentWillReceiveProps(this.props);
+		}
+	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
+			var _this2 = this;
+
 			var state = this.getState(nextProps);
 
-			this.setState(state);
+			this.makeLinks(state.html, function (html) {
+				state.html = html;
+				_this2.setState(state);
+			});
 		}
 	}, {
 		key: 'render',
@@ -26219,13 +26229,50 @@ var Section = function (_React$Component) {
 				content
 			);
 		}
+	}, {
+		key: 'makeLinks',
+		value: function makeLinks(html, callback) {
+			var anchor = /\[\[(.*)\]\]/g;
+
+			API.pages.once('value', function (snapshot) {
+				var pages = snapshot.exportVal();
+				var keys = Object.keys(pages);
+
+				callback(html.replace(anchor, function (match, anchorText) {
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+
+					try {
+						for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var key = _step.value;
+
+							if (pages[key].title === anchorText.trim()) return '<a href="/page/' + key + '">' + anchorText + '</a>';
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator.return) {
+								_iterator.return();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+				}));
+			});
+		}
 	}]);
 
 	return Section;
 }(_react2.default.Component);
 
 var _initialiseProps = function _initialiseProps() {
-	var _this2 = this;
+	var _this3 = this;
 
 	this.getState = function (props) {
 		return {
@@ -26237,15 +26284,15 @@ var _initialiseProps = function _initialiseProps() {
 	};
 
 	this.updateContent = function (evt) {
-		return _this2.setState({ content: evt.target.value });
+		return _this3.setState({ content: evt.target.value });
 	};
 
 	this.save = function (evt) {
-		_this2.setState({ editing: false });
+		_this3.setState({ editing: false });
 
-		API.pages.child(_this2.props.path).update({
+		API.pages.child(_this3.props.path).update({
 			editor: null,
-			content: _this2.state.content || null
+			content: _this3.state.content || null
 		});
 	};
 
@@ -26253,16 +26300,16 @@ var _initialiseProps = function _initialiseProps() {
 		if (evt.target.tagName === 'A') {
 			var href = evt.target.getAttribute('href');
 			if (href.indexOf('/page/') > 0) {
-				_this2.context.router.transitionTo(href);
+				_this3.context.router.transitionTo(href);
 				return evt.preventDefault();
 			}
 			return;
 		}
 
-		if (!_this2.props.user || _this2.state.editing || _this2.state.locked) return;
-		_this2.setState({ editing: true });
-		API.pages.child(_this2.props.path).update({
-			editor: _this2.props.user.username
+		if (!_this3.props.user || _this3.state.editing || _this3.state.locked) return;
+		_this3.setState({ editing: true });
+		API.pages.child(_this3.props.path).update({
+			editor: _this3.props.user.username
 		});
 	};
 };
