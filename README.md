@@ -32,6 +32,10 @@ Open [http://localhost:3003](http://localhost:3003) to view it in the browser.
 Open firebase [console.firebase.google.com](https://console.firebase.google.com).
 
 
+#### Получить помощь
+* [Ваши пожелания и замечания к проекту](https://github.com/it-spectre-ru/react-firebase/pulls)
+
+
 #### Смотрите также
 * [Лицензия](./license.md)
 
