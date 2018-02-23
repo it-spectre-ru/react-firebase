@@ -32,3 +32,7 @@ Open [http://localhost:3003](http://localhost:3003) to view it in the browser.
 Open firebase [console.firebase.google.com](https://console.firebase.google.com).
 
 
+#### Смотрите также
+* [Лицензия](./license.md)
+
+
